@@ -8,7 +8,6 @@ import csv
 from app.utils.scraper_utilitys import EXISTING_TITLES, append_book_to_csv, get_rating
 
 BASE_URL = "https://books.toscrape.com/catalogue/"
-print(EXISTING_TITLES)
 def scrape_books():
     books = []
     page_url = BASE_URL + "page-1.html"
