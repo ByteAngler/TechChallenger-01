@@ -66,8 +66,8 @@ A arquitetura foi planejada para permitir expansão futura:
 
 ```
 +------------------+       +------------------+       +-------------------+
-|   Web Scraping   | --->  |   Processamento  | --->  |       CSV         |
-| (BeautifulSoup)  |       |   (Pandas)       |       |   (data/books)    |
+|   Web Scraping   | --->  |      CSV         | --->  |   Processamento   |
+| (BeautifulSoup)  |       |   (Data/Books)   |       |   (Pandas)        |
 +------------------+       +------------------+       +-------------------+
                                                               |
                                                               v
