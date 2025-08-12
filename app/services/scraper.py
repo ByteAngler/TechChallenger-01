@@ -1,17 +1,28 @@
+"""
+Scraper principal que coleta dados do site Books to Scrape.
+
+Fluxo:
+- Percorre páginas de catálogo.
+- Para cada livro, visita a página de detalhe para obter categoria e título limpo.
+- Faz deduplicação por título antes de persistir no CSV.
+"""
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
 import time
 from urllib.parse import urljoin
-import os
-import csv
 from app.utils.scraper_utilitys import EXISTING_TITLES, append_book_to_csv, get_rating
 
 BASE_URL = "https://books.toscrape.com/catalogue/"
 def scrape_books():
+    """
+    Executa o scraping completo de todas as páginas do catálogo.
+
+    - Usa EXISTING_TITLES para evitar duplicações por título.
+    - Persiste incrementalmente a cada livro (mais resiliente a falhas).
+    - Respeita o site com uma pequena pausa entre requisições.
+    """
     books = []
     page_url = BASE_URL + "page-1.html"
-
     while page_url:
         print(f"Scraping: {page_url}")
         response = requests.get(page_url)
@@ -26,7 +37,6 @@ def scrape_books():
             rating_class = article.select_one("p.star-rating")["class"][1]
             rating = get_rating(rating_class)
             image_url = urljoin(BASE_URL, article.img["src"])
-
             book_relative_url = article.h3.a["href"]
             book_url = urljoin(BASE_URL, book_relative_url)
             book_response = requests.get(book_url)
@@ -47,7 +57,6 @@ def scrape_books():
             else:
                 print(f'The book: {title} already exists on books.cvs')
             time.sleep(0.1)
-
         next_btn = soup.select_one("li.next > a")
         if next_btn:
             next_page = next_btn["href"]

@@ -1,3 +1,10 @@
+"""
+Endpoint simples de healthcheck e verificação mínima de integridade.
+
+- Checa se a API está respondendo.
+- Verifica se o CSV existe e se foi carregado na memória.
+- Confere se as colunas obrigatórias estão presentes no DataFrame.
+"""
 from fastapi import APIRouter, Request
 import os
 
@@ -5,19 +12,19 @@ router = APIRouter()
 
 @router.get("/health")
 def health_check(request: Request):
-    # 1 - API está rodando
-    api_status = "Online!"
+    """
+    Retorna o status básico da API e do dataset.
 
-    # 2 - CSV existe
+    Returns:
+        dict: Dicionário com flags de saúde e integridade.
+    """
+    api_status = "Online!"
     csv_path = getattr(request.app.state, "csv_path", "data/books.csv")
     csv_exists = os.path.exists(csv_path)
-
-    # 3 - CSV carregado e integridade básica
     df = getattr(request.app.state, "df", None)
     data_loaded = df is not None
     required_cols = ["title", "price", "availability", "rating", "category", "image_url"]
     has_required_cols = data_loaded and all(col in df.columns for col in required_cols)
-
     return {
         "api_status": api_status,
         "csv_exists": csv_exists,
