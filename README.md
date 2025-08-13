@@ -43,7 +43,7 @@ Dockerfile
 
 ### 1️⃣ Clonar o repositório
 ```bash
-git clone https://github.com/seuusuario/book-api.git
+git clone https://github.com/ByteAngler/TechChallenger-01.git
 cd book-api
 ```
 
